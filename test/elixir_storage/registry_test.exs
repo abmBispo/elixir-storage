@@ -1,5 +1,6 @@
 defmodule ElixirStorage.RegistryTest do
   use ExUnit.Case, async: true
+
   alias ElixirStorage.{
     Registry,
     Bucket
