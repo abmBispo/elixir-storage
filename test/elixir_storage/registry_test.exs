@@ -25,4 +25,11 @@ defmodule ElixirStorage.RegistryTest do
     Agent.stop(bucket)
     assert Registry.lookup(registry, "shopping") == :error
   end
+
+  test "removes buckets on crash", %{registry: registry} do
+    Registry.create(registry, "shopping")
+    {:ok, bucket} = Registry.lookup(registry, "shopping")
+    Agent.stop(bucket, :shutdown)
+    assert Registry.lookup(registry, "shopping") == :error
+  end
 end

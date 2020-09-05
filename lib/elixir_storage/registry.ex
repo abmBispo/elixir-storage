@@ -1,5 +1,11 @@
 defmodule ElixirStorage.Registry do
   use GenServer
+
+  alias ElixirStorage.{
+    BucketSupervisor,
+    Bucket
+  }
+
   ## Client API
   @doc """
   Starts the registry.
@@ -42,7 +48,7 @@ defmodule ElixirStorage.Registry do
     if Map.has_key?(names, name) do
       {:noreply, names}
     else
-      {:ok, bucket} = ElixirStorage.Bucket.start_link([])
+      {:ok, bucket} = DynamicSupervisor.start_child(BucketSupervisor, Bucket)
       new_ref = Process.monitor(bucket)
       refs = Map.put(refs, new_ref, name)
       names = Map.put(names, name, bucket)
