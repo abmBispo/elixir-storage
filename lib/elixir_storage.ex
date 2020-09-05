@@ -1,18 +1,8 @@
 defmodule ElixirStorage do
-  @moduledoc """
-  Documentation for `ElixirStorage`.
-  """
+  use Application
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> ElixirStorage.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  @impl true
+  def start(_type, _args) do
+    ElixirStorage.Supervisor.start_link(name: ElixirStorage.Supervisor)
+  end  
 end
