@@ -7,12 +7,10 @@ defmodule ElixirStorageServer.Application do
 
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: ElixirStorageServer.Worker.start_link(arg)
-      # {ElixirStorageServer.Worker, arg}
+      {Task.Supervisor, name: ElixirStorageServer.TaskSupervisor},
+      {Task, fn -> ElixirStorageServer.accept(4040) end}
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
     opts = [strategy: :one_for_one, name: ElixirStorageServer.Supervisor]
     Supervisor.start_link(children, opts)
   end
