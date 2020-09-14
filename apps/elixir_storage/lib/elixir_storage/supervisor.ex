@@ -9,7 +9,8 @@ defmodule ElixirStorage.Supervisor do
   def init(:ok) do
     children = [
       {DynamicSupervisor, name: ElixirStorage.BucketSupervisor, strategy: :one_for_one},
-      {ElixirStorage.Registry, name: ElixirStorage.Registry}
+      {ElixirStorage.Registry, name: ElixirStorage.Registry},
+      {Task.Supervisor, name: ElixirStorage.RouterTasks}
     ]
 
     Supervisor.init(children, strategy: :one_for_all)
