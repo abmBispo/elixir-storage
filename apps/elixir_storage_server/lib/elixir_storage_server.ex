@@ -10,7 +10,7 @@ defmodule ElixirStorageServer do
     # 4. `reuseaddr: true` - allows us to reuse the address if the listener crashes
     #
     {:ok, socket} =
-      :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
+      :gen_tcp.listen(port, [:binary, packet: :raw, active: false, reuseaddr: true])
 
     Logger.info("Accepting connections on port #{port}")
     loop_acceptor(socket)
@@ -27,10 +27,12 @@ defmodule ElixirStorageServer do
   end
 
   defp serve(socket) do
-    msg =
-      with {:ok, data} <- read_line(socket),
-           {:ok, command} <- ElixirStorageServer.Command.parse(data),
-           do: ElixirStorageServer.Command.run(command)
+    line = read_line(socket)
+    Logger.debug("RECEIVED #{inspect(elem(line, 1))}")
+
+    msg = with  {:ok, data} <- line,
+                {:ok, command} <- ElixirStorageServer.Command.parse(data),
+    do: ElixirStorageServer.Command.run(command)
 
     write_line(socket, msg)
     serve(socket)
