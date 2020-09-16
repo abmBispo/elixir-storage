@@ -2,8 +2,8 @@ defmodule ElixirStorageServerTest do
   use ExUnit.Case
 
   setup do
-    Application.stop(:elixirstorage)
-    :ok = Application.start(:elixirstorage)
+    Application.stop(:elixir_storage)
+    :ok = Application.start(:elixir_storage)
   end
 
   setup do
@@ -12,10 +12,9 @@ defmodule ElixirStorageServerTest do
     %{socket: socket}
   end
 
-  @tag :distributed
   test "server interaction", %{socket: socket} do
     assert send_and_recv(socket, "UNKNOWN shopping\r\n") == "UNKNOWN COMMAND\r\n"
-    assert send_and_recv(socket, "GET shopping eggs\r\n") == "NOT FOUND\r\n"
+    assert send_and_recv(socket, "GET shopping eggs\r\n") == "BUCKET NOT FOUND\r\n"
     assert send_and_recv(socket, "CREATE shopping\r\n") == "OK\r\n"
     assert send_and_recv(socket, "PUT shopping eggs 3\r\n") == "OK\r\n"
 

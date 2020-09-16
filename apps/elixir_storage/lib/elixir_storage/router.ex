@@ -28,11 +28,10 @@ defmodule ElixirStorage.Router do
     raise "could not find entry for #{inspect(bucket)} in table #{inspect(table())}"
   end
 
-  @spec table :: [{Range.t(), :"bar@computer-name" | :"foo@computer-name"}, ...]
   @doc """
   The routing table.
   """
   def table do
-    [{?a..?m, :"foo@computer-name"}, {?n..?z, :"bar@computer-name"}]
+    [{?a..?m, :"foo@alan-rarolabs"}, {?n..?z, :"bar@alan-rarolabs"}]
   end
 end
